@@ -33,6 +33,9 @@ if __name__ == "__main__":
     listenport=''
     logfile=''
     # Use getopt to avoid param order errors
+    if len(sys.argv) != 7:
+        print("Usage: %s -i 198.51.100.99 -p 3389 -l rdphoney.log" % sys.argv[0])
+        exit()
     opts, args = getopt.getopt(sys.argv[1:],"i:p:l:")
     for o, a in opts:
         if o == '-i':
