@@ -41,7 +41,7 @@ if __name__ == "__main__":
         if o == '-i':
             listenip=a
         elif o == '-p':
-            listenport=a
+            listenport=int(a)
         elif o == '-l':
             logfile=a
         elif o == '-h':
