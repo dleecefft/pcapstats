@@ -60,6 +60,10 @@ if __name__ == "__main__":
         else:
             print("Usage: %s -i 198.51.100.99 -p 3389 -l rdphoney.log" % sys.argv[0])
 
+    # need a default spot to place honeypot logs, make group writeable if you have a few users running them
+    d = "/var/tmp/hpotlogs"
+    if not os.path.exists(d, 0775):
+        os.mkdir(d)
 
     tcpserver = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
