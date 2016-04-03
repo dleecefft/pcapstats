@@ -16,9 +16,16 @@ def datelogprefix():
     return logdatepre
 
 def writelog(logsfx,logevt):
-    thislog = "/var/tmp/" + datelogprefix() + "_" + logsfx
-    print "writing " + logevt
-    print "to logfile " + thislog
+    # This log directory is hard coded based on a check at runtime, change in both places if you need to move it
+    # builds a new log file everyday the honey pot sees activity so it is easier to find event data
+    thislog = "/var/tmp/hpotlogs" + datelogprefix() + "_" + logsfx
+    wmode = 'ab+'
+    if os.path.exists(thislog):
+        wmode = 'ab+'
+    else:
+        wmode = 'w+'
+    with open(thislog,wmode) as fh:
+        fh.write(logevt)
     return
 
 def handle_client(client_socket):
