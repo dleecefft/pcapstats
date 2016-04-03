@@ -15,22 +15,30 @@ def datelogprefix():
     logdatepre = now.strftime("%Y-%m-%d")
     return logdatepre
 
+
 def writelog(logsfx,logevt):
+    #Get the time stamp as soon as possible
+    tstamp = datetime.utcnow().strftime("%Y-%m-%dT%H:%m:%S.%fZ")
     # This log directory is hard coded based on a check at runtime, change in both places if you need to move it
     # builds a new log file everyday the honey pot sees activity so it is easier to find event data
     thislog = "/var/tmp/hpotlogs/" + datelogprefix() + "_" + logsfx
+    # write events in 5424 syslog format so other tools may be able to ingest add TZ info if really needed
+    # local 0, notice https://tools.ietf.org/html/rfc5424#page-11
+    # broke the timestamp for fidelity, milliseonds are helpful,
+    logevthdr ="<133>" + str(tstamp) + hname
+
     wmode = 'ab+'
     if os.path.exists(thislog):
         wmode = 'ab+'
     else:
         wmode = 'w+'
     with open(thislog,wmode) as fh:
-        fh.write(logevt + "\n")
+        fh.write(logevthdr + "tcphoneypot: " + logevt + "\n")
     return
 
 def handle_client(client_socket):
     req = client_socket.recv(1024)
-    logstring = "[*] Recieved: %s" % req
+    logstring = "Recieved data %s" % req
     writelog(logfile,logstring)
     # acknowledge and quit
     client_socket.send("ACK!")
@@ -39,7 +47,7 @@ def handle_client(client_socket):
 def runserver():
     while True:
         client,addr = tcpserver.accept()
-        logstring = "[*] Accepted connection from %s:%d" % (addr[0],addr[1])
+        logstring = "Accepted connection from %s:%d" % (addr[0],addr[1])
         writelog(logfile,logstring)
         client_handler = threading.Thread(target=handle_client,args=(client,))
         client_handler.start()
@@ -71,6 +79,8 @@ if __name__ == "__main__":
     d = "/var/tmp/hpotlogs"
     if not os.path.exists(d):
         os.mkdir(d,0770)
+    # hostname with a leading space and a following space, make it once
+    hname = " " + socket.gethostname() + " "
 
     tcpserver = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -84,7 +94,7 @@ if __name__ == "__main__":
 
     try:
         tcpserver.listen(12)  # a dozen backlog should be plenty but check, auto scanners are aggressive.
-        logstring = "[*} Listening on %s:%d" % (listenip,listenport)
+        logstring = "Listening on %s:%d" % (listenip,listenport)
         writelog(logfile,logstring)
     except socket.error, v:
         errorcode=v[0]
