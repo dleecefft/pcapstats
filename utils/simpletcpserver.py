@@ -62,8 +62,8 @@ if __name__ == "__main__":
 
     # need a default spot to place honeypot logs, make group writeable if you have a few users running them
     d = "/var/tmp/hpotlogs"
-    if not os.path.exists(d, 0775):
-        os.mkdir(d)
+    if not os.path.exists(d):
+        os.mkdir(d,0770)
 
     tcpserver = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
