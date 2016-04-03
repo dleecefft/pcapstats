@@ -10,11 +10,21 @@
 import socket, threading, os, sys, getopt, errno
 from datetime import datetime
 
+def datelogprefix():
+    now=datetime.now()
+    logdatepre = now.strftime("%Y-%m-%d")
+    return logdatepre
 
+def writelog(logsfx,logevt):
+    thislog = "/var/tmp/" + datelogprefix() + "_" + logsfx
+    print "writing " + logevt
+    print "to logfile " + thislog
+    return
 
 def handle_client(client_socket):
     req = client_socket.recv(1024)
-    print "[*] Recieved: %s" % req
+    logstring = "[*] Recieved: %s" % req
+    writelog(logfile,logstring)
     # acknowledge and quit
     client_socket.send("ACK!")
     client_socket.close()
@@ -22,7 +32,8 @@ def handle_client(client_socket):
 def runserver():
     while True:
         client,addr = tcpserver.accept()
-        print "[*] Accepted connection from %s:%d" % (addr[0],addr[1])
+        logstring = "[*] Accepted connection from %s:%d" % (addr[0],addr[1])
+        writelog(logfile,logstring)
         client_handler = threading.Thread(target=handle_client,args=(client,))
         client_handler.start()
 
@@ -62,7 +73,8 @@ if __name__ == "__main__":
 
     try:
         tcpserver.listen(12)  # a dozen backlog should be plenty but check, auto scanners are aggressive.
-        print "[*} Listening on%s:%d" % (listenip,listenport)
+        logstring = "[*} Listening on %s:%d" % (listenip,listenport)
+        writelog(logfile,logstring)
     except socket.error, v:
         errorcode=v[0]
         # assuming this worked above this should never fire so leave messy.
