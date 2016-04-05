@@ -2,10 +2,13 @@
 # A simple lure that accepts coommand line args for listening port, IP address and log file
 # This should be completly detectable by a human but an automated probe might waste some time
 # the log file is to grab logs to assist with profiling.
-# Create a new log every day, through naming?
+# Create a new log every day, through naming based on date stamp.
 #
 # Credits:
 # Borrows heavily from Justin Sietz Blackhat python, some smart folks in Canada :-)
+# https://www.nostarch.com/blackhatpython
+# All those folks who write RFCs thank you for your patience.  https://tools.ietf.org/html/rfc5424#page-11
+
 
 import socket, threading, os, sys, getopt, errno
 from datetime import datetime
@@ -23,7 +26,7 @@ def writelog(logsfx,logevt):
     # builds a new log file everyday the honey pot sees activity so it is easier to find event data
     thislog = "/var/tmp/hpotlogs/" + datelogprefix() + "_" + logsfx
     # write events in 5424 syslog format so other tools may be able to ingest add TZ info if really needed
-    # local 0, notice https://tools.ietf.org/html/rfc5424#page-11
+    # local 0, notice
     # broke the timestamp for fidelity, milliseonds are helpful,
     logevthdr ="<133>" + str(tstamp) + hname
 
