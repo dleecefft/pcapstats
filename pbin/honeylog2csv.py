@@ -13,9 +13,9 @@ from datetime import datetime
 
 def tsfixer(tstring):
     tmplist = tstring.strip().split('>')
+    tstring = tmplist[1]
     dt = datetime.strptime(tstring,'%Y-%m-%dT%H:%M:%S.%fZ')
     print type(dt)
-    tstring = tmplist[1]
     return tstring
 
 
