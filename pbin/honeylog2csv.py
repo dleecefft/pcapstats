@@ -52,7 +52,7 @@ if __name__ == "__main__":
     logoutlist = []
 
     # Use getopt to avoid param order errors
-    if len(sys.argv) != 7:
+    if len(sys.argv) < 4:
         print("Usage: %s -l 2016-04-04_rdphoney -c|-a (csv|ascii_log) " % sys.argv[0])
         exit()
     opts, args = getopt.getopt(sys.argv[1:],"l:c:a:")
