@@ -13,6 +13,8 @@ from datetime import datetime
 
 def tsfixer(tstring):
     tmplist = tstring.strip().split('>')
+    dt = datetime.strptime(tstring,'%Y-%m-%dT%H:%M:%S.%fZ')
+    print type(dt)
     tstring = tmplist[1]
     return tstring
 
@@ -30,7 +32,7 @@ def readhplogcsv(thislog,llist):
             if line1grep in line:
                 rawrow = line.strip().split(' ')
                 newts = tsfixer(rawrow[0])
-                newip = ipfixer(rawrow[7])
+                newip = ipfixer(rawrow[6])
                 csvline = newts + "," + newip
                 llist.append(csvline)
     return llist
