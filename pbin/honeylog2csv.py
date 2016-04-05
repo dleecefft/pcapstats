@@ -50,6 +50,7 @@ if __name__ == "__main__":
     line1grep = 'Accepted'
     line2grep = 'Recieved'
     logoutlist = []
+    csv = True
 
     # Use getopt to avoid param order errors
     if len(sys.argv) < 4:
