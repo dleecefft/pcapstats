@@ -40,7 +40,7 @@ def readhplogcsv(thislog,llist):
                 rawrow = line.strip().split(' ')
                 newts = tsfixer(rawrow[0])
                 newip = ipfixer(rawrow[6])
-                csvline = newts[0] + "," + newts[1] + "," + newts[2] + "," newts[3] + newip + "\n"
+                csvline = newts[0] + "," + str(newts[1]) + "," + newts[2] + ","  + newts[3] + newip + "\n"
                 llist.append(csvline)
     return llist
 
@@ -61,7 +61,7 @@ if __name__ == "__main__":
     logoutlist = []
     csv = True
     # Need the epoch object to make millisecond timestamps
-    epoch = datetime.datetime.utcfromtimestamp(0)
+    epoch = datetime.utcfromtimestamp(0)
 
     # Use getopt to avoid param order errors
     if len(sys.argv) < 4:
