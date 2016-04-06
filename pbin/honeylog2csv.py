@@ -9,14 +9,21 @@
 
 import  os, sys, getopt, errno
 from datetime import datetime
+from datetime import date
+from datetime import time
 
 
 def tsfixer(tstring):
     tmplist = tstring.strip().split('>')
     tstring = tmplist[1]
     dt = datetime.strptime(tstring,'%Y-%m-%dT%H:%M:%S.%fZ')
-    print type(dt)
-    return tstring
+    millitstamp = int((dt - epoch).total_seconds() * 1000)
+    # strip out iso date and time as well
+    isodate = date.isoformat(dt)
+    isotime = dt.time()
+    tstringlist=[tstring,millitstamp,isodate,isotime]
+
+    return tstringlist
 
 
 def ipfixer(ipstring):
@@ -33,7 +40,7 @@ def readhplogcsv(thislog,llist):
                 rawrow = line.strip().split(' ')
                 newts = tsfixer(rawrow[0])
                 newip = ipfixer(rawrow[6])
-                csvline = newts + "," + newip
+                csvline = newts[0] + "," + newts[1] + "," + newts[2] + "," newts[3] + newip + "\n"
                 llist.append(csvline)
     return llist
 
@@ -53,6 +60,8 @@ if __name__ == "__main__":
     line2grep = 'Recieved'
     logoutlist = []
     csv = True
+    # Need the epoch object to make millisecond timestamps
+    epoch = datetime.datetime.utcfromtimestamp(0)
 
     # Use getopt to avoid param order errors
     if len(sys.argv) < 4:
