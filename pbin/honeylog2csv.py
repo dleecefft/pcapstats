@@ -7,7 +7,7 @@
 # what ever log analyzer is being used.
 
 
-import  os, sys, getopt, errno
+import  os, sys, getopt, errno, string
 from datetime import datetime
 from datetime import date
 from datetime import time
@@ -48,7 +48,7 @@ def readhplogcsv(thislog,llist):
 def writehplog(linelist,wfile):
     with open(wfile,'w') as wfh:
         for line in linelist:
-            wfh.write(line)
+            wfh.write(line + "\n")
     #fh.write(logevthdr + "tcphoneypot: " + logevt + "\n")
     return
 
@@ -71,15 +71,15 @@ if __name__ == "__main__":
 
     # Use getopt to avoid param order errors
     if len(sys.argv) < 4:
-        print("Usage: %s -l 2016-04-04_rdphoney -c csv | -a ascii_log [-w outputfile) " % sys.argv[0])
+        print("Usage: %s -l 2016-04-04_rdphoney -f csv | ascii_log [-w outputfilei]) " % sys.argv[0])
         exit()
-    opts, args = getopt.getopt(sys.argv[1:],"l:c:a:w")
+    opts, args = getopt.getopt(sys.argv[1:],"l:f:w")
     for o, a in opts:
         if o == '-l':
             logfile=a
-        elif o == '-c':
-            csv = True
-            filesfx = '-processed.csv'
+        elif o == '-f':
+            outformat=a
+
         elif o == '-a':
             csv = False
             filesfx = '-processed_ascii.log'
@@ -92,9 +92,17 @@ if __name__ == "__main__":
             print("Usage: %s -l 2016-04-04_rdphoney -c|-a (csv|ascii_log) " % sys.argv[0])
 
         # open the log file and split
+    if str(outformat).lower() == 'csv':
+        csv = True
+        filesfx = '_processed.csv'
+    else:
+        csv = False
+        filesfx = '_processed_ascii.log'
+
     if csv:
         list2write = readhplogcsv(logfile,logoutlist)
         if writefile:   # write to output file if argument given else push to std out
+            print outfile
             fname = outfile + filesfx
             writehplog(list2write,fname)
         else:
