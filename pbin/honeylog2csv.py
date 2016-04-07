@@ -40,12 +40,15 @@ def readhplogcsv(thislog,llist):
                 rawrow = line.strip().split(' ')
                 newts = tsfixer(rawrow[0])
                 newip = ipfixer(rawrow[6])
-                csvline = str(newts[1]) + "," + newts[0] + "," + str(newts[2]) + ","  + str(newts[3]) + "," + newip + "\n"
+                csvline = str(newts[1]) + "," + newts[0] + "," + str(newts[2]) + ","  + str(newts[3]) + "," + newip
                 llist.append(csvline)
         llist.sort()
     return llist
 
-def writehplog():
+def writehplog(linelist,wfile):
+    with open(wfile,'w') as wfh:
+        for line in linelist:
+            wfh.write(line)
     #fh.write(logevthdr + "tcphoneypot: " + logevt + "\n")
     return
 
@@ -61,14 +64,16 @@ if __name__ == "__main__":
     line2grep = 'Recieved'
     logoutlist = []
     csv = True
+    writefile = False
+    outfile='parsedhpotlog'
     # Need the epoch object to make millisecond timestamps
     epoch = datetime.utcfromtimestamp(0)
 
     # Use getopt to avoid param order errors
     if len(sys.argv) < 4:
-        print("Usage: %s -l 2016-04-04_rdphoney -c|-a (csv|ascii_log) " % sys.argv[0])
+        print("Usage: %s -l 2016-04-04_rdphoney -c csv | -a ascii_log [-w outputfile) " % sys.argv[0])
         exit()
-    opts, args = getopt.getopt(sys.argv[1:],"l:c:a:")
+    opts, args = getopt.getopt(sys.argv[1:],"l:c:a:w")
     for o, a in opts:
         if o == '-l':
             logfile=a
@@ -78,6 +83,9 @@ if __name__ == "__main__":
         elif o == '-a':
             csv = False
             filesfx = '-processed_ascii.log'
+        elif o == '-w':
+            writefile = True
+            outfile =a
         elif o == '-h':
             print("Usage: %s -l 2016-04-04_rdphoney -c|-a (csv|ascii_log) " % sys.argv[0])
         else:
@@ -86,6 +94,9 @@ if __name__ == "__main__":
         # open the log file and split
         if csv:
             list2write = readhplogcsv(logfile,logoutlist)
-            for lline in list2write:
-                print lline
+            if writefile:   # write to output file if argument given else push to std out
+                writehplog(list2write,outfile)
+            else:
+                for lline in list2write:
+                    print lline
 
