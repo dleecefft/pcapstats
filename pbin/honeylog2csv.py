@@ -92,12 +92,12 @@ if __name__ == "__main__":
             print("Usage: %s -l 2016-04-04_rdphoney -c|-a (csv|ascii_log) " % sys.argv[0])
 
         # open the log file and split
-        if csv:
-            list2write = readhplogcsv(logfile,logoutlist)
-            if writefile:   # write to output file if argument given else push to std out
-                fname = outfile + filesfx
-                writehplog(list2write,fname)
-            else:
-                for lline in list2write:
-                    print lline
+    if csv:
+        list2write = readhplogcsv(logfile,logoutlist)
+        if writefile:   # write to output file if argument given else push to std out
+            fname = outfile + filesfx
+            writehplog(list2write,fname)
+        else:
+            for lline in list2write:
+                print lline
 
