@@ -77,9 +77,6 @@ if __name__ == "__main__":
             logfile=a
         elif o == '-f':
             outformat=a
-        elif o == '-a':
-            csv = False
-            filesfx = '-processed_ascii.log'
         elif o == '-w':
             writefile = True
             outfile =a
@@ -91,10 +88,10 @@ if __name__ == "__main__":
         # open the log file and split
     if str(outformat).lower() == 'csv':
         csv = True
-        filesfx = '_processed.csv'
+        filesfx = '-processed.csv'
     else:
         csv = False
-        filesfx = '_processed_ascii.log'
+        filesfx = '-processed_ascii.log'
 
     if csv:
         list2write = readhplogcsv(logfile,logoutlist)
