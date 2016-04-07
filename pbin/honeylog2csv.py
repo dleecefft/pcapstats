@@ -40,8 +40,9 @@ def readhplogcsv(thislog,llist):
                 rawrow = line.strip().split(' ')
                 newts = tsfixer(rawrow[0])
                 newip = ipfixer(rawrow[6])
-                csvline = newts[0] + "," + str(newts[1]) + "," + str(newts[2]) + ","  + str(newts[3]) + "," + newip + "\n"
+                csvline = str(newts[1]) + "," + newts[0] + "," + str(newts[2]) + ","  + str(newts[3]) + "," + newip + "\n"
                 llist.append(csvline)
+        llist.sort()
     return llist
 
 def writehplog():
