@@ -95,7 +95,8 @@ if __name__ == "__main__":
         if csv:
             list2write = readhplogcsv(logfile,logoutlist)
             if writefile:   # write to output file if argument given else push to std out
-                writehplog(list2write,outfile)
+                fname = outfile + filesfx
+                writehplog(list2write,fname)
             else:
                 for lline in list2write:
                     print lline
