@@ -22,9 +22,8 @@ def archivefile(shippedfile):
 
 def remotecopy(curfile):
     # build command to execute
-    #echo "scp -i ${KEY} ${pcap} $USER@${DHOST}$DDIR "
-    #b = "i am a {0}".format(sub1)
-    print('scp -i {0} '.format(KEY,) + curfile + ' {0}@{1}:{2}/'.format(USER,DHOST,DDIR))
+    scpcmd = ('scp -i {0} '.format(KEY,) + curfile + ' {0}@{1}:{2}/'.format(USER,DHOST,DDIR))
+    print(scpcmd)
     #os.system("scp ")
     # check copy status, if copied ok
     archivefile(curfile)
@@ -46,7 +45,6 @@ def gettodayiso():
 
 def fileslug(greptoken):
     slug = '\d\d\d\d-\d\d-\d\d_.*'+greptoken
-    # clumsy but looks simpler to pass to regex compile
     return slug
 
 
@@ -57,14 +55,14 @@ def copynarch(src,arch,dst,hst,fmt):
         if len(files) > 0:
             # define the string to match files that are most likely to be honeypot files
             filepat = fileslug(fmt)
-            print(filepat)
-            filepre = re._compile(filepat)
+            filepre = re.compile(filepat)
+            isotoday = gettodayiso()
             for thisfile in files:
-                print thisfile
-                if re.search(filepre,thisfile ) and os.path.isfile(thisfile):
-                    remotecopy(thisfile)
+                fullpathfile = os.path.join(src,thisfile)
+                if not thisfile.startswith(isotoday) and re.search(filepre,thisfile ) and os.path.isfile(fullpathfile):
+                    remotecopy(fullpathfile)
                 else:
-                    print "No files in the directory provided"
+                    print "No files to copy in the directory provided"
         else:
             print("Sorry, %s does not appear to be a valid directory. Exiting now" % SDIR)
 
