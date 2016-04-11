@@ -24,7 +24,11 @@ def remotecopy(curfile):
     # build command to execute
     scpcmd = ('scp -i {0} '.format(KEY,) + curfile + ' {0}@{1}:{2}/'.format(USER,DHOST,DDIR))
     print(scpcmd)
-    #os.system("scp ")
+    try:
+        os.system(scpcmd)
+    except Exception as e:
+        print(e)
+        pass
     # check copy status, if copied ok
     archivefile(curfile)
     return
