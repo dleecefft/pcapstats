@@ -5,7 +5,6 @@
 #
 # The pcap job is in bash but this is more complicated, could have many honey pot logs
 # it's kind of lame shelling out but this is a one time a day job, performance no big deal
-#
 
 
 import os, sys, getopt,re
