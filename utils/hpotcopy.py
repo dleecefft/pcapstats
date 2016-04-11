@@ -47,7 +47,6 @@ def gettodayiso():
 def fileslug(greptoken):
     slug = '\d\d\d\d-\d\d-\d\d_.*'+greptoken
     # clumsy but looks simpler to pass to regex compile
-    slug = "r'" + slug +"'"
     return slug
 
 
@@ -58,6 +57,7 @@ def copynarch(src,arch,dst,hst,fmt):
         if len(files) > 0:
             # define the string to match files that are most likely to be honeypot files
             filepat = fileslug(fmt)
+            print(filepat)
             filepre = re._compile(filepat)
             for thisfile in files:
                 print thisfile
