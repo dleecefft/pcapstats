@@ -7,7 +7,7 @@
 # it's kind of lame shelling out but this is a one time a day job, performance no big deal
 
 
-import os, sys, getopt,re
+import os, sys, getopt,re, shutil
 from datetime import datetime
 from datetime import date
 
@@ -17,6 +17,12 @@ from datetime import date
 
 def archivefile(shippedfile):
     print "moving " + shippedfile + " to " + ADIR
+    if os.path.isdir(ADIR):
+        shutil.copy(shippedfile,ADIR)
+    else:
+        os.mkdir(ADIR,0755)
+        shutil.copy(shippedfile,ADIR)
+
     return
 
 
@@ -34,11 +40,11 @@ def remotecopy(curfile):
     return
 
 
-def logfilelist(srcdir,fnamegrep):
-    # need enough in the fname grep arg to id the correct files
-    # hopefully this ok, passing regex in a function seems frail, pick a clean directory
-    filepre = gettodayiso()
-    return
+# def logfilelist(srcdir,fnamegrep):
+#     # need enough in the fname grep arg to id the correct files
+#     # hopefully this ok, passing regex in a function seems frail, pick a clean directory
+#     filepre = gettodayiso()
+#     return
 
 
 def gettodayiso():
