@@ -96,11 +96,13 @@ if __name__ == "__main__":
                 FMATCH =a
             elif o == '-t':
                 DHOST = a
-            elif o == '-h':
+            #elif o == '-h':
+            #    print "All params are optional, can be set in top of file for daily archive job"
+            #    print("Usage: %s -s log-source_dir -a log_archive_dir -d remote_destination_dir -t remote_host" % sys.argv[0])
+            #    exit()
+            else:
                 print "All params are optional, can be set in top of file for daily archive job"
                 print("Usage: %s -s log-source_dir -a log_archive_dir -d remote_destination_dir -t remote_host" % sys.argv[0])
-            else:
-                print("Usage: %s -s log-source_dir -a log_archive_dir -d remote_destination_dir -t remote_host" % sys.argv[0])
-
+                exit()
     # need to catch a few things like is this a real directory and does it contain any files that match the format
     copynarch(SDIR,ADIR,DDIR,DHOST,FMATCH)
