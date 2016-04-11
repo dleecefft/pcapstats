@@ -12,14 +12,7 @@ from datetime import datetime
 from datetime import date
 
 
-# define user account for transfer and location of key, these defaults can be overriden by command line params
-USER='hptester'
-KEY='/home/hptester/.ssh/id_rsa'
-SDIR='/var/tmp/hpotlogs'
-ADIR= SDIR + "/archive"
-DHOST='north.balam.ca' # should work as ip as well
-DDIR='/opt/hpdata/south'
-FMATCH ='honey'
+
 
 
 def archivefile(shippedfile):
@@ -80,11 +73,19 @@ def copynarch(src,arch,dst,hst,fmt):
 
 
 if __name__ == "__main__":
+    # define user account for transfer and location of key, these defaults can be overriden by command line params
+    USER='hptester'
+    KEY='/home/hptester/.ssh/id_rsa'
+    SDIR='/var/tmp/hpotlogs'
+    ADIR= SDIR + "/archive"
+    DHOST='north.balam.ca' # should work as ip as well
+    DDIR='/opt/hpdata/south'
+    FMATCH ='honey'
 
-    # option to override certain params if
+# option to override certain params if
     if len(sys.argv) > 1:
         # Use getopt to avoid param order errors
-        opts, args = getopt.getopt(sys.argv[1:],"s:d:a:f:t:")
+        opts, args = getopt.getopt(sys.argv[1:],"s:d:a:f:t:h:")
         for o, a in opts:
             if o == '-s':
                 SDIR=a
@@ -96,10 +97,10 @@ if __name__ == "__main__":
                 FMATCH =a
             elif o == '-t':
                 DHOST = a
-            #elif o == '-h':
-            #    print "All params are optional, can be set in top of file for daily archive job"
-            #    print("Usage: %s -s log-source_dir -a log_archive_dir -d remote_destination_dir -t remote_host" % sys.argv[0])
-            #    exit()
+            elif o == '-h':
+                print "All params are optional, can be set in top of file for daily archive job"
+                print("Usage: %s -s log-source_dir -a log_archive_dir -d remote_destination_dir -t remote_host" % sys.argv[0])
+                exit()
             else:
                 print "All params are optional, can be set in top of file for daily archive job"
                 print("Usage: %s -s log-source_dir -a log_archive_dir -d remote_destination_dir -t remote_host" % sys.argv[0])
