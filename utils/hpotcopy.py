@@ -18,10 +18,16 @@ from datetime import date
 def archivefile(shippedfile):
     print "moving " + shippedfile + " to " + ADIR
     if os.path.isdir(ADIR):
-        shutil.copy(shippedfile,ADIR)
+        try:
+            shutil.move(shippedfile,ADIR)
+        except:
+            pass
     else:
         os.mkdir(ADIR,0755)
-        shutil.copy(shippedfile,ADIR)
+        try:
+            shutil.move(shippedfile,ADIR)
+        except:
+            pass
 
     return
 
