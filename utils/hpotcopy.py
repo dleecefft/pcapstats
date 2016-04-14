@@ -85,7 +85,6 @@ def copynarch(src,arch,dst,hst,fmt):
 
         return
 
-
 if __name__ == "__main__":
     # define user account for transfer and location of key, these defaults can be overriden by command line params
     USER='hptester'
