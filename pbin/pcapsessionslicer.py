@@ -15,8 +15,8 @@ def fullstrsplit(ipportstr):
     retlist.append(sssnlist[0])
     tmpip = sssnlist[1].split(':')
     retlist.append(tmpip[0])
-    retlist.append(tmpip[3])
-    tmpip = sssnlist[1].split(':')
+    retlist.append(tmpip[1])
+    tmpip = sssnlist[3].split(':')
     retlist.append(tmpip[0])
     retlist.append(tmpip[1])
     return retlist
@@ -122,10 +122,10 @@ if __name__ == "__main__":
             elif o == '-t':
                 action=a
             else:
-                print("Usage: %s -f file.pcap -m ip:port_string -o [outputfile] " % sys.argv[0])
+                print("Usage: %s -f file.pcap -m ip:port_string -o [outputfile] -t [exclude] <- ignore these sessions " % sys.argv[0])
                 exit()
     else:
-        print("Usage: %s -f file.pcap -m ip:port_string -o [outputfile] " % sys.argv[0])
+        print("Usage: %s -f file.pcap -m ip:port_string -o [outputfile] -t [exclude] <- ignore these sessions " % sys.argv[0])
         exit()
     # default action is search for string provided vs exclude
     if action == "exclude":
