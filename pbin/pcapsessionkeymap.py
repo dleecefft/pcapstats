@@ -36,7 +36,7 @@ def partstrsplit(ipportstr):
 def writereducedcsv(mapreddict,wfile):
     try:
         with open(wfile,'wb') as wfh:
-            csvwrt = csv.writer(wfile)
+            csvwrt = csv.writer(wfh, delimiter=',')
             csvwrt.writerow(["IP-port_key","bytes rec","byte resp"])
             csvwrt.writerows(mapreddict.items())
     except Exception as e:
