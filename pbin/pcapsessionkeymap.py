@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from scapy.all import *
-import re, sys, getopt, shutil
+import re, sys, getopt, shutil, csv
 
 
 def pcapsessions(pfile):
@@ -33,10 +33,12 @@ def partstrsplit(ipportstr):
     retlist.append('')
     return retlist
 
-def writesessioncsv(fileline,wfile):
+def writereducedcsv(mapreddict,wfile):
     try:
-        with open(wfile,'a') as wfh:
-            wfh.write(fileline + "\n")
+        with open(wfile,'wb') as wfh:
+            csvwrt = csv.writer(wfile)
+            csvwrt.writerow(["IP-port_key","bytes rec","byte resp"])
+            csvwrt.writerows(mapreddict.items())
     except Exception as e:
         print(e)
         pass
@@ -92,7 +94,7 @@ def rplvdictadd(kvlist,rpld):
         rpld[k] = rpld[k] + v
     return rpld
 
-def mapsessionbykey(ssncsv,smtch,recfile,rplyfile,drec,drly):
+def mapsessionbykey(ssncsv,smtch,drec,drly):
     keyvallist = []
     with open(ssncsv,'r') as rfh:
         for line in rfh:
@@ -110,35 +112,6 @@ def mapsessionbykey(ssncsv,smtch,recfile,rplyfile,drec,drly):
     retlist = [drec,drly]
     return retlist
 
-def sessionparsewrite(ssnobj,include,pktgrep,csvoutfile):
-    sessions = ssnobj.sessions()
-
-    for k, v in sessions.iteritems():
-
-        rxparse = re.match(r'^\w+\s+(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{1,5}).*\s(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{1,5})',k)
-
-        if include and rxparse is not None:
-            # looking for a match
-            if rxparse.group(1) == pktgrep or rxparse.group(2) == pktgrep :
-                ksplit = fullstrsplit(k)
-                kline = ','.join(map(str,ksplit))
-                kline = kline +"," + str(len(v))
-                writesessioncsv(kline,csvoutfile)
-        elif rxparse is not None:
-            if rxparse.group(1) != pktgrep and rxparse.group(2) != pktgrep :
-                #print k,str(len(v))
-                ksplit = fullstrsplit(k)
-                kline = ','.join(map(str,ksplit))
-                kline = kline +"," + str(len(v))
-                writesessioncsv(kline,csvoutfile)
-
-        elif not include and rxparse is None:
-            ksplit = partstrsplit(k)
-            kline = ','.join(map(str,ksplit))
-            kline = kline +"," + str(len(v))
-            writesessioncsv(kline,csvoutfile)
-            #print k,str(len(v))
-    return
 
 
 if __name__ == "__main__":
@@ -147,25 +120,25 @@ if __name__ == "__main__":
         #action=''
         #outcsv=False
         # Use getopt to avoid param order errors
-        opts, args = getopt.getopt(sys.argv[1:],"f:m:s:r:t:h:")
+        opts, args = getopt.getopt(sys.argv[1:],"f:m:o:")
         for o, a in opts:
             if o == '-f':
                 splitfile=a
             elif o == '-m':
                 strmatch=a
-            elif o == '-os':
-                datarecv=a
+            elif o == '-o':
+                reducedcsv=a
                 #outcsv=True
-            elif o == '-or':
-                datarply=a
+            #elif o == '-r':
+            #    datarply=a
                 #outcsv=True
             #elif o == '-t':
             #    action=a
             else:
-                print("Usage: %s -f sessionfile.csv -m ip:port_string -s outputfile-fromunknown -r outputfile-toounknown" % sys.argv[0])
+                print("Usage: %s -f sessionfile.csv -m ip:port_string -o outputfile.csv" % sys.argv[0])
                 exit()
     else:
-        print("Usage: %s -f sessionfile.csv -m ip:port_string -s outputfile-fromunknown -r outputfile-toounknown" % sys.argv[0])
+        print("Usage: %s -f sessionfile.csv -m ip:port_string -o outputfile.csv" % sys.argv[0])
         exit()
     # default action is search for string provided vs exclude
     #if action == "exclude":
@@ -182,16 +155,16 @@ if __name__ == "__main__":
 
     # one main function to generate the two files
     # returns a list of two dictionaries
-    recrpldicts = mapsessionbykey(splitfile,strmatch,datarecv,datarply,datarecdict,datarpldict)
+    recrpldicts = mapsessionbykey(splitfile,strmatch,datarecdict,datarpldict)
 
-    print("This is the received traffic")
+    # use the ip-port key for map reduction, capture non-responses as 0. ( Ignores possiblity of unsolicited outbound traffic )
+    mapreduced = {}
     for ky,vl in recrpldicts[0].iteritems():
-        print ky + "," + str(vl)
+        rplv = "0"
+        if recrpldicts[1][ky]:
+            rplv = str(recrpldicts[1][ky])
+        bytevals =[str(vl),rplv]
+        mapreduced[ky] = bytevals
 
-    print("This is the responce traffic")
-    for ky,vl in recrpldicts[1].iteritems():
-        print ky + "," + str(vl)
-
-    #else:
-    #    sessionparse(thisssnobj,action,strmatch)
+    writereducedcsv(mapreduced,reducedcsv)
 
