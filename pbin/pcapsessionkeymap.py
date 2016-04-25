@@ -100,13 +100,15 @@ def mapsessionbykey(ssncsv,smtch,recfile,rplyfile,drec,drly):
             if str(linelist[1] + ":" + linelist[2]) == smtch:
                 thiskey = linelist[3] + "-" + linelist[4]
                 keyvallist = [thiskey, int(linelist[5])]
-                print keyvallist
+                drly = rplvdictadd(keyvallist,drly)
             else:
                 thiskey = linelist[1] + "-" + linelist[2]
                 keyvallist = [thiskey, int(linelist[5])]
                 print keyvallist
-    #splitfile,strmatch,datarecv,datarply,drec,drly
-    return
+                drec = recvdictadd(keyvallist, drec)
+    # return the two completed dictionaries
+    retlist = [drec,drly]
+    return retlist
 
 def sessionparsewrite(ssnobj,include,pktgrep,csvoutfile):
     sessions = ssnobj.sessions()
@@ -179,7 +181,17 @@ if __name__ == "__main__":
     datarpldict = {}
 
     # one main function to generate the two files
-    mapsessionbykey(splitfile,strmatch,datarecv,datarply,datarecdict,datarpldict)
+    # returns a list of two dictionaries
+    recrpldicts = mapsessionbykey(splitfile,strmatch,datarecv,datarply,datarecdict,datarpldict)
+
+    print("This is the received traffic")
+    for ky,vl in recrpldicts[0].iteritems():
+        print ky + "," + str(vl)
+
+    print("This is the responce traffic")
+    for ky,vl in recrpldicts[1].iteritems():
+        print ky + "," + str(vl)
+
     #else:
     #    sessionparse(thisssnobj,action,strmatch)
 
