@@ -55,7 +55,7 @@ def sessionparse(ssnobj,include,pktgrep):
             if rxparse.group(1) == pktgrep or rxparse.group(2) == pktgrep :
                 ksplit = fullstrsplit(k)
                 kline = ','.join(map(str,ksplit))
-                kline = kline +"," + str(len(v))
+                kline = kline +"," + str(len(str(v)))
                 print kline
                 #print k,str(len(v))
         elif rxparse is not None:
@@ -63,12 +63,12 @@ def sessionparse(ssnobj,include,pktgrep):
                 #print k,str(len(v))
                 ksplit = fullstrsplit(k)
                 kline = ','.join(map(str,ksplit))
-                kline = kline +"," + str(len(v))
+                kline = kline +"," + str(len(str(v)))
                 print kline
         elif not include and rxparse is None:
             ksplit = partstrsplit(k)
             kline = ','.join(map(str,ksplit))
-            kline = kline +"," + str(len(v))
+            kline = kline +"," + str(len(str(v)))
             print kline
             #print k,str(len(v))
     return
@@ -85,20 +85,20 @@ def sessionparsewrite(ssnobj,include,pktgrep,csvoutfile):
             if rxparse.group(1) == pktgrep or rxparse.group(2) == pktgrep :
                 ksplit = fullstrsplit(k)
                 kline = ','.join(map(str,ksplit))
-                kline = kline +"," + str(len(v))
+                kline = kline +"," + str(len(str(v)))
                 writesessioncsv(kline,csvoutfile)
         elif rxparse is not None:
             if rxparse.group(1) != pktgrep and rxparse.group(2) != pktgrep :
                 #print k,str(len(v))
                 ksplit = fullstrsplit(k)
                 kline = ','.join(map(str,ksplit))
-                kline = kline +"," + str(len(v))
+                kline = kline +"," + str(len(str(v)))
                 writesessioncsv(kline,csvoutfile)
 
         elif not include and rxparse is None:
             ksplit = partstrsplit(k)
             kline = ','.join(map(str,ksplit))
-            kline = kline +"," + str(len(v))
+            kline = kline +"," + str(len(str(v)))
             writesessioncsv(kline,csvoutfile)
             #print k,str(len(v))
     return
