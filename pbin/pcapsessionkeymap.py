@@ -144,10 +144,10 @@ def sessionparsewrite(ssnobj,include,pktgrep,csvoutfile):
 if __name__ == "__main__":
 
     if len(sys.argv) > 3 :
-        action=''
-        outcsv=False
+        #action=''
+        #outcsv=False
         # Use getopt to avoid param order errors
-        opts, args = getopt.getopt(sys.argv[1:],"f:m:os:or:t:h:")
+        opts, args = getopt.getopt(sys.argv[1:],"f:m:s:r:t:h:")
         for o, a in opts:
             if o == '-f':
                 splitfile=a
@@ -162,10 +162,10 @@ if __name__ == "__main__":
             #elif o == '-t':
             #    action=a
             else:
-                print("Usage: %s -f sessionfile.csv -m ip:port_string -os outputfile-fromunknown -or outputfile-toounknown" % sys.argv[0])
+                print("Usage: %s -f sessionfile.csv -m ip:port_string -s outputfile-fromunknown -r outputfile-toounknown" % sys.argv[0])
                 exit()
     else:
-        print("Usage: %s -f sessionfile.csv -m ip:port_string -os outputfile-fromunknown -or outputfile-toounknown" % sys.argv[0])
+        print("Usage: %s -f sessionfile.csv -m ip:port_string -s outputfile-fromunknown -r outputfile-toounknown" % sys.argv[0])
         exit()
     # default action is search for string provided vs exclude
     #if action == "exclude":
