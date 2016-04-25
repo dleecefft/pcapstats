@@ -10,7 +10,7 @@ def writereducedcsv(mapreddict,wfile):
             csvwrt = csv.writer(wfh, delimiter=',')
             csvwrt.writerow(["IP-port_key","bytes rec","byte resp"])
             for key, value in mapreddict.items():
-                csvwrt.writerow(key + value[0] + value[1])
+                csvwrt.writerow([key,value[0],value[1]])
     except Exception as e:
         print(e)
         pass
