@@ -4,7 +4,6 @@ from scapy.all import *
 import re, sys, getopt, shutil, csv
 
 
-
 def writereducedcsv(mapreddict,wfile):
     try:
         with open(wfile,'wb') as wfh:
