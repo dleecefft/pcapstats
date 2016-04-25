@@ -38,7 +38,9 @@ def writereducedcsv(mapreddict,wfile):
         with open(wfile,'wb') as wfh:
             csvwrt = csv.writer(wfh, delimiter=',')
             csvwrt.writerow(["IP-port_key","bytes rec","byte resp"])
-            csvwrt.writerows(mapreddict.items())
+            for key, value in mapreddict.items():
+                bytesinout = value.split(',')
+                csvwrt.writerows(key + bytesinout[0] + bytesinout[1])
     except Exception as e:
         print(e)
         pass
@@ -106,7 +108,7 @@ def mapsessionbykey(ssncsv,smtch,drec,drly):
             else:
                 thiskey = linelist[1] + "-" + linelist[2]
                 keyvallist = [thiskey, int(linelist[5])]
-                print keyvallist
+                #print keyvallist
                 drec = recvdictadd(keyvallist, drec)
     # return the two completed dictionaries
     retlist = [drec,drly]
