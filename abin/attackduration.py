@@ -50,7 +50,7 @@ def writecsv(csvfile,outputline):
     return
 
 def newcsvfile(csvfile):
-    with open(csvfile,"r") as outputfile:
+    with open(csvfile,"w") as outputfile:
         outputfile.write("epoch-ip-key,ip_addr,secs_duration\n")
     return
 
