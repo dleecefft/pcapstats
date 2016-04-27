@@ -131,5 +131,7 @@ if (protorouter(svcproto)):
 
 for ipkey in condict:
     duration = float(condict[ipkey][2]) -   float(condict[ipkey][1])
-    print ipkey + " " + str(condict[ipkey][0]) + " duration: " +  str(condict[ipkey][2]) + " - " + str(condict[ipkey][1]) + " " + str(duration)
+    csvline = ipkey + "," + str(condict[ipkey][0]) + "," + str(duration)
+    print csvline
+    #print ipkey + " " + str(condict[ipkey][0]) + " duration: " +  str(condict[ipkey][2]) + " - " + str(condict[ipkey][1]) + " " + str(duration)
 #
