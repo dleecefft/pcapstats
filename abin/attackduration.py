@@ -49,6 +49,11 @@ def writecsv(csvfile,outputline):
         outputfile.write(outputline + "\n")
     return
 
+def newcsvfile(csvfile):
+    with open(csvfile,"r") as outputfile:
+        outputfile.write("epoch-ip-key,ip_addr,secs_duration\n")
+    return
+
 
 def dictload(clist,cdict):
     ckey = clist[0]
@@ -122,6 +127,10 @@ if (protorouter(svcproto)):
     if len(thisplist) > 0:
         parsedurations(thiscsv,svcproto,thisplist)
 
+# create  new csv file with a header
+newcsvfile(ofile)
+
+# write the remainder to the CSv
 for ipkey in condict:
     duration = float(condict[ipkey][2]) -   float(condict[ipkey][1])
     csvline = ipkey + "," + str(condict[ipkey][0]) + "," + str(duration)
