@@ -44,15 +44,10 @@ def readcsv(pfile):
     # return a read only file handle
     return open(pfile,"r")
 
-#def epochconv(tsstr):
-#    # convert the frame time into iso via epoch, clumsy but works better for excel
-#    # return list so we can have both in the CSV, epoch and friendly
-#    retlist=[]
-#    dtobj=datetime.fromtimestamp(float(tsstr))
-#    retlist.append(str(dtobj).strip())
-#    retlist.append(tsstr.strip())
-#    return retlist
-
+def writecsv(csvfile,outputline):
+    with open(csvfile,"a") as outputfile:
+        outputfile.write(outputline + "\n")
+    return
 
 
 def dictload(clist,cdict):
@@ -80,8 +75,6 @@ def parsedurations(fhdl,proto,svclist):
                 timekey = str(timekey) + "-" + llist[4]
                 tmplist = [timekey,llist[4],llist[2]]
                 dictload(tmplist,condict)
-                #print timekey + "-" + llist[4] + "-" + llist[5]
-
     return
 
 def protorouter(evalarg):
@@ -132,6 +125,6 @@ if (protorouter(svcproto)):
 for ipkey in condict:
     duration = float(condict[ipkey][2]) -   float(condict[ipkey][1])
     csvline = ipkey + "," + str(condict[ipkey][0]) + "," + str(duration)
-    print csvline
+    writecsv(ofile,csvline)
     #print ipkey + " " + str(condict[ipkey][0]) + " duration: " +  str(condict[ipkey][2]) + " - " + str(condict[ipkey][1]) + " " + str(duration)
 #
